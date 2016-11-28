@@ -19,49 +19,64 @@ import java.util.logging.Logger;
  */
 public class ClientWorker implements Runnable {
     boolean newMessageAvail = false;
-    String newMessage = null;
+    String newMessage = "";
     Socket mClient = null;
-    String userName = null;
-    
+    String userName = "";
+    boolean done = false;
     BufferedReader in = null;
     PrintWriter out = null;
     
-    public ClientWorker(Socket client, String name)
+    public ClientWorker(Socket client)
     {
        mClient = client;
-       userName = name;
-    }
-    public void run()
-    {
-        try
+       userName = null;
+       try
         {
             in = new BufferedReader(new InputStreamReader(mClient.getInputStream()));
             out = new PrintWriter(mClient.getOutputStream(), true);
         } catch (IOException ex) {}
-        
+    }
+    public void run()
+    {
         try
+        {       
+            String junk = in.readLine();
+            out.println("Enter username");
+            userName = in.readLine();
+        } catch (IOException ex) {}
+        
+        System.out.println("Client: " + userName + " started");
+
+        while(!done)
         {
-            String temp = in.readLine();
-            if(newMessage.equals(null))
+            try
             {
-                newMessage = temp;
+                String temp = in.readLine();
+                if(newMessage.equals(""))
+                {
+                    newMessage = temp;
+                }
+                else
+                {
+                    newMessage += "~"+temp;
+                }
+                newMessageAvail = true;
+            } catch (IOException ex) {
+                Logger.getLogger(ClientWorker.class.getName()).log(Level.SEVERE, null, ex);
             }
-            else
-            {
-                newMessage += "~"+temp;
-            }
-            newMessageAvail = true;
-            
-        } catch (IOException ex) {
-            Logger.getLogger(ClientWorker.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public String getNewMessage()
     {
         String temp = newMessage;
-        newMessage = null;
+        newMessage = "";
         newMessageAvail = false;
         return temp;
+    }
+    
+    public void sendMessage(String message)
+    {
+        out.println(message);
     }
 }
