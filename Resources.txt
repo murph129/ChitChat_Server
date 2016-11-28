@@ -1,0 +1,4 @@
+https://docs.oracle.com/javase/tutorial/essential/concurrency/runthread.html
+http://www.oracle.com/technetwork/java/socket-140484.html
+http://stackoverflow.com/questions/29240158/how-to-get-server-to-accept-multiple-sockets-on-same-port
+http://stackoverflow.com/questions/2983835/how-can-i-interrupt-a-serversocket-accept-method
