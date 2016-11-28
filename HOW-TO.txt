@@ -1,0 +1,11 @@
+1.) Start AuthServer Project
+2.) Provide credential csv filepath
+3.) From client start a new connection
+	- 127.0.0.1
+	- Port 8189
+4.) Send junk message (Can be any string, this is a workaround to a bunch of junk coming in on the first socket message for the server)
+5.) Send credentials to be verified with a comma to delimit (user,pass)
+6.) Result will return with (false/true,result message)
+	- false,incorrect user
+	- false,incorrect pass
+	- true,verified
