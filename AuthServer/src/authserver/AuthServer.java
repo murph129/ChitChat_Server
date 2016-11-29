@@ -5,6 +5,8 @@
  */
 package authserver;
 
+import java.util.Scanner;
+
 /**
  *
  * @author Steve
@@ -13,7 +15,10 @@ public class AuthServer {
 
     
     public static void main(String[] args) {
-        Server s = new Server();
+        Scanner in = new Scanner(System.in);
+        System.out.print("Enter Credential CSV filepath: ");
+        String credPath = in.nextLine();
+        Verify s = new Verify(credPath);
     }
     
 }
