@@ -7,22 +7,13 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Steve
- */
 public class ClientWorker implements Runnable {
     boolean newMessageAvail = false;
     String newMessage = "";
     Socket mClient = null;
     String userName = "";
     boolean done = false;
+    boolean disconnect = false;
     BufferedReader in = null;
     PrintWriter out = null;
     
@@ -36,6 +27,7 @@ public class ClientWorker implements Runnable {
             out = new PrintWriter(mClient.getOutputStream(), true);
         } catch (IOException ex) {}
     }
+    @Override
     public void run()
     {
         try
@@ -52,19 +44,30 @@ public class ClientWorker implements Runnable {
             try
             {
                 String temp = in.readLine();
-                if(newMessage.equals(""))
+                if(temp.equals("CLIENT_GOODBYE"))
                 {
-                    newMessage = temp;
+                    done = true;
                 }
                 else
                 {
-                    newMessage += "~"+temp;
+                    if(newMessage.equals(""))
+                    {
+                        newMessage = temp;
+                    }
+                    else
+                    {
+                        newMessage += "~"+temp;
+                    }
                 }
+                
                 newMessageAvail = true;
             } catch (IOException ex) {
                 Logger.getLogger(ClientWorker.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        while(!disconnect)
+        {}
+        return;
     }
     
     public String getNewMessage()
@@ -78,5 +81,11 @@ public class ClientWorker implements Runnable {
     public void sendMessage(String message)
     {
         out.println(message);
+    }
+    
+    public void cleanUp() throws IOException
+    {
+        disconnect = true;
+        mClient.close();
     }
 }

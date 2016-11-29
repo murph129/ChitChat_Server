@@ -50,6 +50,9 @@ public class CommServer extends javax.swing.JFrame {
         MsgSocketListener msgServer = new MsgSocketListener();
         Thread t = new Thread(msgServer);
         t.start();
+        CmdSocketListener cmdServer = new CmdSocketListener();
+        t = new Thread(cmdServer);
+        t.start();
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.

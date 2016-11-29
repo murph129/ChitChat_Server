@@ -3,19 +3,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Steve
- */
 public class MsgSocketListener implements Runnable {
     ArrayList clients = new ArrayList();
     boolean done = false;
@@ -44,32 +32,49 @@ public class MsgSocketListener implements Runnable {
             
             try
             {
-                for(Object o : clients)
-                {
-                    ClientWorker tempClient = (ClientWorker)o;
-                    if(tempClient.newMessageAvail)
-                    {
-                        String sender = tempClient.userName;
-                        String temp = tempClient.getNewMessage();
-                        for(Object x : clients)
-                        {
-                            ClientWorker tempMess = (ClientWorker) x;
-                            if(sender.equals(tempMess.userName))
-                            {}
-                            else
-                            {
-                              tempMess.sendMessage(sender + ": " + temp);  
-                            }
-                        }
-                    }
-                }
-                if(cw.newMessageAvail)
-                {
-                    System.out.println(cw.userName + " conneceted");
-                }   
+                checkConnections();
+                relayMessage();
             }
             catch(Exception ex)
             {}
         }
+    }
+    
+    public void checkConnections() throws IOException, InterruptedException
+    {
+        int index = 0;
+        for(Object o : clients)
+        {
+            ClientWorker temp = (ClientWorker)o;
+            if(temp.done)
+            {
+                temp.cleanUp();
+                clients.remove(index);
+            }
+            index++;
+        }
+    }
+    
+    public void relayMessage()
+    {
+        for(Object o : clients)
+        {
+            ClientWorker tempClient = (ClientWorker)o;
+            if(tempClient.newMessageAvail)
+            {
+                String sender = tempClient.userName;
+                String temp = tempClient.getNewMessage();
+                for(Object x : clients)
+                {
+                    ClientWorker tempMess = (ClientWorker) x;
+                    if(sender.equals(tempMess.userName))
+                    {}
+                    else
+                    {
+                      tempMess.sendMessage(sender + ": " + temp);  
+                    }
+                }
+            }
+        }   
     }
 }
