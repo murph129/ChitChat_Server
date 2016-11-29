@@ -5,6 +5,7 @@
  */
 package authserver;
 
+import java.io.File;
 import java.util.Scanner;
 
 /**
@@ -16,8 +17,10 @@ public class AuthServer {
     
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        System.out.print("Enter Credential CSV filepath: ");
-        String credPath = in.nextLine();
+        File f = new File(System.getProperty("java.class.path"));
+        File dir = f.getAbsoluteFile().getParentFile();
+        String path = dir.toString();
+        String credPath = path+ "\\cred.csv";
         Verify s = new Verify(credPath);
     }
     

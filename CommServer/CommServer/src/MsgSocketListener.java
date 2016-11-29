@@ -40,6 +40,7 @@ public class MsgSocketListener implements Runnable {
         }
     }
     
+    //CHECK TO SEE IF CONNECTIONS ARE STILL ALIVE - IF NOT, REMOVE FROM CLIENTS ARRAY LIST
     public void checkConnections() throws IOException, InterruptedException
     {
         int index = 0;
@@ -55,6 +56,7 @@ public class MsgSocketListener implements Runnable {
         }
     }
     
+    //RELAY ANY MESSAGES FROM A CLIENT THREAD TO THE REST
     public void relayMessage()
     {
         for(Object o : clients)

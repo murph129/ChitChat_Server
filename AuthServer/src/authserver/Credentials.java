@@ -71,7 +71,10 @@ public class Credentials {
         {}
         finally
         {
-            br.close();
+            if(br != null)
+            {
+                br.close();
+            }
             return result;
         }
     }

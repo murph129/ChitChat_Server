@@ -16,7 +16,6 @@ public class Verify
     Credentials cred;
     public Verify(String credPath)
     {
-        credentialsFilePath = credPath;
         System.out.println("Auth Server Started.");
         
         try
@@ -32,11 +31,14 @@ public class Verify
                     OutputStream outStream = incoming.getOutputStream(); // the OUTPUT stream handler
                     Scanner in = new Scanner(inStream); //setup of input
                     PrintWriter out = new PrintWriter(outStream,true); // sends output
+                    
                     String junk = in.nextLine();
                     String credentialPair = in.nextLine();
+                    
                     System.out.println("Verify request: " + credentialPair.trim());
                     cred = new Credentials();
-                    result = cred.verifyCredentials(credentialsFilePath, credentialPair);
+                    result = cred.verifyCredentials(credPath, credentialPair);
+                    
                     System.out.println("Result: " + result);
                     out.println(result);
                 }
