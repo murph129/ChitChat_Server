@@ -38,8 +38,9 @@ public class ClientWorker implements Runnable {
     {
         //READ IN THE USERNAME WHO CONNECTED
         try
-        {       
+        {   
             String junk = in.readLine();
+            out.println("connected");
             userName = in.readLine();
             profile = getProfileInfo(userName);
             sendMessage(profile);

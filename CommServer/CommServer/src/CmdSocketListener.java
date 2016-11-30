@@ -32,6 +32,7 @@ public class CmdSocketListener implements Runnable {
                 out = new PrintWriter(s.getOutputStream(), true);
                 
                 String junk = in.readLine();
+                out.println("connected");
                 String commands = in.readLine();
                 String[] command = commands.split(",");
                 

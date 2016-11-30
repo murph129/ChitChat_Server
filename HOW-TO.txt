@@ -1,11 +1,54 @@
-1.) Start AuthServer Project
-2.) Provide credential csv filepath
+Connection process is as follows.
+1.) Connect to Auth Server on Port 8189 and verify credentials
+2.) Once verified connect to Comm Server on Port 8190
+3.) If creating new profile, connect to Comm Server on Port 8191 to add new profile information with the instructions below.
+	- Once complete, present login screen to client and have them connect to the Auth Server as stated in step 1
+
+
+========= CONNECTING CLIENT TO AUTH SERVER ====================
+1.) Start AuthServer .jar
+	- cred.csv should be placed in the same directory as the executing .jar
 3.) From client start a new connection
 	- 127.0.0.1
 	- Port 8189
-4.) Send junk message (Can be any string, this is a workaround to a bunch of junk coming in on the first socket message for the server)
-5.) Send credentials to be verified with a comma to delimit (user,pass)
+4.) Send a message saying "connect" and ensure to follow/add a \n to signify the end of the line/message
+	- Auth Server replies with "connected" if successfull
+5.) Send credentials to be verified with a comma to delimit 
+	- user,pass
 6.) Result will return with (false/true,result message)
 	- false,incorrect user
 	- false,incorrect pass
 	- true,verified
+7.) Connection Closes
+
+========= CONNECTING CLIENT TO COMM SERVER ===================
+1.) Start CommServer .jar
+
+########### TO SEND MESSAGES TO OTHER CLIENTS ############
+1.) Start a new connection with the following details
+	- 127.0.0.1
+	- Port 8190
+3.) Send a message saying "connect" and ensure to follow/add a \n to signify the end of the line/message
+	- Comm Server replies with "connected" if successfull
+4.) After receiving the "connected" message, reply with the ONLY the username the client will be connecting as
+5.) Comm Server will reply with the clients profile information in the below format if available. If no profile found an error message will be returned. 
+    This will cause the connection to close and the client disconnected from the server.
+	-  userName,FirstName,LastName,DoB,email
+	- false,no profile found for that user
+6.) Once profile information is received, send messages as needed to be relayed. The message should contain the content only. The server will handle adding in who the sender is before relaying to other clients
+7.) When signing out/disconnecting, send the below message to disconnect from the server. TRY AND MAKE SURE TO ALWAYS DO THIS WHEN CLOSING/DISCONNECTING
+	- "CLIENT_GOODBYE"
+8.) Connection Closes
+
+########## TO CREATE A NEW PROFILE/"SIGN UP"    OR    TO UPDATE CURRENT PROFILE INFORMATION #############
+1.) Start a new connection with the following details
+	- 127.0.0.1
+	- Port 8191
+2.) Send a message saying "connect" and ensure to follow/add a \n to signify the end of the line/message
+	- Comm Server replies with "connected" if successfull
+3.) Two options are available - UPDATE and ADD. When using UPDATE, all data can be changed except the username. This is permanent. The commands are the same minus the first keyword.
+	- ADD,murph129,testPass,Stephen,Murphy,03/17/1994,murph129@purdue.edu   <==== Adds a new user with that information
+	- UPDT,murph129,newPass,Stephen,Murphy,03/17/1994,murph129@purde.edu  <==== Updates the murph129 user with the new password and information
+	- "Invalid Command"  <==== This will only occur if you do not ensure ADD or UPDT is at the beggining of the string
+///// WHEN USING THE UPDATE COMMAND. THE CLIENT MUST UPDATE ITS INFORMATION LOCALLY ON ITS OWN. THIS NEW INFORMATION WILL NOT BE RETRIEVED FROM THE SERVER UNTIL THE CLIENT RECONNECTS
+4.) Connection Closes

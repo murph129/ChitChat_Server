@@ -33,6 +33,7 @@ public class Verify
                     PrintWriter out = new PrintWriter(outStream,true); // sends output
                     
                     String junk = in.nextLine();
+                    out.println("connected");
                     String credentialPair = in.nextLine();
                     
                     System.out.println("Verify request: " + credentialPair.trim());

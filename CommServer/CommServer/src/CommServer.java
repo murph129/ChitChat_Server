@@ -57,12 +57,19 @@ public class CommServer extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         System.out.println("Comm Server Started");
+        
+        //STARTS SERVER FOR RELAYING MESSAGES TO CLIENTS
         MsgSocketListener msgServer = new MsgSocketListener();
         Thread t = new Thread(msgServer);
         t.start();
+        
+        //STARTS SERVER FOR EXECUTING COMMANDS RELATED TO PROFILES
         CmdSocketListener cmdServer = new CmdSocketListener();
         t = new Thread(cmdServer);
         t.start();
+       
+        
+        
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
