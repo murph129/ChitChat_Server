@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class MsgSocketListener implements Runnable {
     ArrayList clients = new ArrayList();
     boolean done = false;
+    boolean newUser = false;
     
     public void run()
     {
@@ -28,6 +29,7 @@ public class MsgSocketListener implements Runnable {
                 Thread t = new Thread(cw);
                 t.start();
                 clients.add(cw);
+                newUser = true;
             } catch (IOException ex) {}
             
             try

@@ -9,12 +9,27 @@
  * @author Steve
  */
 public class CommServer extends javax.swing.JFrame {
-
-    /**
+    MsgSocketListener msgServer;
+    CmdSocketListener cmdServer;
+    boolean done = false;
+    /*
      * Creates new form CommServer
      */
     public CommServer() {
         initComponents();
+        
+        System.out.println("Comm Server Started");
+        
+        //STARTS SERVER FOR RELAYING MESSAGES TO CLIENTS
+        msgServer = new MsgSocketListener();
+        Thread t = new Thread(msgServer);
+        t.start();
+        
+        //STARTS SERVER FOR EXECUTING COMMANDS RELATED TO PROFILES
+        cmdServer = new CmdSocketListener();
+        t = new Thread(cmdServer);
+        t.start();
+        
     }
 
     /**
@@ -27,26 +42,41 @@ public class CommServer extends javax.swing.JFrame {
     private void initComponents() {
 
         txtProfilePath = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lstUsers = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         txtProfilePath.setText("jTextField1");
+
+        lstUsers.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(lstUsers);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(107, 107, 107)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
                 .addComponent(txtProfilePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(234, Short.MAX_VALUE))
+                .addContainerGap(226, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(108, 108, 108)
-                .addComponent(txtProfilePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(172, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtProfilePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -56,19 +86,19 @@ public class CommServer extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        System.out.println("Comm Server Started");
-        
-        //STARTS SERVER FOR RELAYING MESSAGES TO CLIENTS
-        MsgSocketListener msgServer = new MsgSocketListener();
-        Thread t = new Thread(msgServer);
-        t.start();
-        
-        //STARTS SERVER FOR EXECUTING COMMANDS RELATED TO PROFILES
-        CmdSocketListener cmdServer = new CmdSocketListener();
-        t = new Thread(cmdServer);
-        t.start();
-       
-        
+        //HALP ME
+        /*while(!done)
+        {
+            if(msgServer.newUser)
+            {
+                lstUsers.removeAll();
+                for(Object o : msgServer.clients)
+                {
+                    ClientWorker temp = (ClientWorker)o;
+                    lstUsers.add("Test", null);
+                }
+            }
+        }*/
         
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -97,11 +127,16 @@ public class CommServer extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new CommServer().setVisible(true);
+                
+                
             }
         });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList<String> lstUsers;
     private javax.swing.JTextField txtProfilePath;
     // End of variables declaration//GEN-END:variables
 }

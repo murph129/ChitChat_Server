@@ -17,6 +17,10 @@ public class ClientWorker implements Runnable {
     
     String profile = "";
     String userName = "";
+    String firstName = "";
+    String lastName = "";
+    String DoB = "";
+    String eMail = "";
     
     boolean done = false;
     boolean disconnect = false;
@@ -135,6 +139,10 @@ public class ClientWorker implements Runnable {
                 if(tempProfile[0].equals(user))
                 {
                     result = "true,"+info;
+                    firstName = tempProfile[1];
+                    lastName = tempProfile[2];
+                    DoB = tempProfile[3];
+                    eMail = tempProfile[4];
                 }
                 info = br.readLine();
             }
@@ -148,5 +156,11 @@ public class ClientWorker implements Runnable {
             br.close();
             return result;
         }
+    }
+    
+    private void kickUser()
+    {
+        done = true;
+        sendMessage("SERVER,You have been kicked by the server Admin.");
     }
 }
