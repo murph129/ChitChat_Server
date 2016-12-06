@@ -44,10 +44,10 @@ public class ClientWorker implements Runnable {
         try
         {   
             String junk = in.readLine();
-            out.println("connected");
+            //out.println("connected");
             userName = in.readLine();
-            profile = getProfileInfo(userName);
-            sendMessage(profile);
+            //profile = getProfileInfo(userName);
+            //sendMessage(profile);
         } catch (IOException ex) {}
         
         //IF NO PROFILE IS FOUND - CLOSE THREAD AND DISCONNECT USER
