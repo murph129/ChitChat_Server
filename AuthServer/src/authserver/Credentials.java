@@ -26,7 +26,7 @@ public class Credentials {
     
     public String verifyCredentials(String credentialPath, String credIn) throws FileNotFoundException, IOException
     {
-        String result = null;
+        String result = "false,incorrect user";
         String[] credentials = credIn.split(",");
         String newUser = credentials[0];
         String newPass = credentials[1];
@@ -59,10 +59,6 @@ public class Credentials {
                     }
                 }
                 csvCredPair = br.readLine();
-            }
-            if(result.equals(null))
-            {
-                result = "error,incorrect user";
             }
         }
         catch(FileNotFoundException e)
