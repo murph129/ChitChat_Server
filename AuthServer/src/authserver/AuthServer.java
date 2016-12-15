@@ -21,7 +21,6 @@ public class AuthServer {
         File dir = f.getAbsoluteFile().getParentFile();
         String path = dir.toString();
         String credPath = path+ "\\cred.csv";
-        System.out.println(credPath);
         Verify s = new Verify(credPath);
     }
     

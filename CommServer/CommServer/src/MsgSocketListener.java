@@ -71,12 +71,7 @@ public class MsgSocketListener implements Runnable {
                 for(Object x : clients)
                 {
                     ClientWorker tempMess = (ClientWorker) x;
-                    if(sender.equals(tempMess.userName))
-                    {}
-                    else
-                    {
-                      tempMess.sendMessage(sender + ": " + temp);  
-                    }
+                    tempMess.sendMessage(sender + ": " + temp);  
                 }
             }
         }   
